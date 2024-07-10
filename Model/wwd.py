@@ -1,13 +1,13 @@
 import pvporcupine
 import pyaudio
-# import os
+import os
 import struct
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 
-# load_dotenv()
+load_dotenv()
 
 class WakeWordDetector:
-    def __init__(self, key):
+    def __init__(self, key=os.getenv('PORCUPINE_ACCESS_KEY')):
         self.porcupine = pvporcupine.create(
             keywords=["terminator"],
             access_key=key

@@ -1,16 +1,12 @@
-from wwd import WakeWordDetector
-from speech import SpeechRecognizer
+from Model.models import Models
+from Features.Features import features
 from dotenv import load_dotenv
-from llm import LanguageModel
-from text_to_speech import TextToSpeech
 import os
 
 load_dotenv()
 
-detector = WakeWordDetector(os.getenv('PORCUPINE_ACCESS_KEY'))
-speechRecognizer = SpeechRecognizer()
-llm = LanguageModel()
-textToSpeech = TextToSpeech()
+detector, speechRecognizer, llm, textToSpeech = Models()
+musicStreamer = features()
 
 x = 0
 while True:
@@ -23,6 +19,14 @@ while True:
         
         if "exit" in recognized_text.lower():
             break
+        if "play" in recognized_text.lower():
+            song_name = musicStreamer.get_song_name(recognized_text)
+            print(f"Streaming '{song_name}'...")
+
+            player = musicStreamer.stream_music(song_name)
+
+            input("Press Enter to stop playback and exit...")
+            player.close_player()
         
         response = llm.get_response(recognized_text)
         
